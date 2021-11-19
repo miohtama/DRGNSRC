@@ -1,0 +1,37 @@
+# makefile for double dragon 2 (dd2.exe)
+# used sample makefile from TASM 2.0 installer examples.  Probably other ways to do this.
+# discovered link and linkvga on the original game disk which are the linker inputs for building the .exe
+# slightly modified to change ",\work\game\ddmain/M/s;" to ",ddmain/M/s;" to remove the folder requirement.
+.asm.obj:
+ tasm /zi /mu $<
+
+DD2.EXE: ddmain.obj ddconver.obj ddact.obj ddcolrs.obj ddinstr.obj ddio.obj ddwpon.obj ddega.obj \
+		ddintel.obj ddstg.obj ddsetup.obj ddspec.obj ddpanel.obj ddsprt.obj ddrect.obj ddtan.obj \
+		tlzw.obj ddegspr.obj ddundraw.obj   ddscrl.obj \
+		ddanim2.obj ddanim1.obj ddanimw.obj
+	tlink @linkvga
+
+ddmain.obj: ddmain.asm ddeqfile
+ddconver.obj: ddconver.asm ddeqfile
+ddact.obj: ddact.asm ddeqfile
+ddcolrs.obj: ddcolrs.asm ddeqfile
+ddinstr.obj: ddinstr.asm ddeqfile
+ddio.obj: ddio.asm ddeqfile
+ddwpon.obj: ddwpon.asm ddeqfile
+ddega.obj: ddega.asm ddeqfile
+ddintel.obj: ddintel.asm ddeqfile
+ddstg.obj: ddstg.asm ddeqfile
+ddsetup.obj: ddsetup.asm ddeqfile
+ddspec.obj: ddspec.asm ddeqfile
+ddpanel.obj: ddpanel.asm ddeqfile
+ddsprt.obj: ddsprt.asm ddeqfile
+ddrect.obj: ddrect.asm ddeqfile
+ddtan.obj: ddtan.asm ddeqfile
+tlzw.obj: tlzw.asm ddeqfile
+ddegspr.obj: ddegspr.asm ddeqfile
+ddundraw.obj: ddundraw.asm ddeqfile
+ddscrl.obj: ddscrl.asm ddeqfile
+ddanim2.obj: ddanim2.asm ddeqfile
+ddanim1.obj: ddanim1.asm ddeqfile
+ddanimw.obj: ddanimw.asm ddeqfile
+

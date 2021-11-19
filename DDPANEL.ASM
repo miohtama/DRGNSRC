@@ -225,6 +225,9 @@ player_rst:
 	mov	ax,seg dseg
 	mov	ds,ax
 ;mov	es,ax	;is this bug ever gunna go ????
+if RELEASE_BUILD
+		mov 	es, ax	; apparently not!
+endif		
 		push	si
 		call	pull_person
 		mov	strength, 20
@@ -249,6 +252,11 @@ player_rst:
 		pop	ax
 		pop	ax
 		pop	ax
+if RELEASE_BUILD
+extrn loc_5a6f:near
+		call loc_5a6f
+		mov word ptr ds:[cycle], 0 ; variable is @1ed1
+endif		
 		jmp	main_loop
 
 bonus:

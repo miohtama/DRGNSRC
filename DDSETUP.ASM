@@ -247,7 +247,10 @@ dont_unkill:
 
 	call	reload	; Checks wether we need to reload 
 			; if so it loads in the req file.
-
+if RELEASE_BUILD
+public loc_5a6f
+loc_5a6f:	; called from ddpanel.asm in dragon.exe
+endif
 	cmp	[sixteencol],0
 	jne	noncga
 ;cmp	mission, 3
