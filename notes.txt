@@ -1,0 +1,75 @@
+how to build:
+
+1) make a folder accessable to DOSBox.  If you happen to call your new folder \work\game you can skip step 5
+2) unzip the original DRGNSRC.LZH archive into that folder
+3) extract the contents of this archive into that folder.  Overwrite any .asm files.
+4) copy the files LINK and LINKVGA from disk1 of Double Dragon II to that folder
+5) edit the file LINKVGA and remove the text "\work\game". This will allow you to build the program in any folder you'd like, but you're modifying original files here, so it's your call.
+6) open DOSBox
+7) change to your folder
+8) type build
+9) you should now have ddmain.exe in your folder.  This builds the VGA version although all 4 video modes appear to work. If you select tandy be sure to change DOSBox config.
+
+=============================================
+	work journal
+=============================================
+17-nov-21
+all done!  Almost byte compatible; file size is identical but 8 bytes don't match.
+There's 1 variable char_map in the routine miss5_frig in ddsetup.asm which is off by 4 bytes in the address.  This is referenced 5 times.
+char_map is addressed otherwhere in the code and those match, so I'm a tad confused as to how to fix this.
+The other 3 mismatched bytes are from the internal TASM macro "even" which emits a 90h when needed.  These are 00's in dragon.exe.
+This is 100% harmless and might be a byproduct of the TASM version itself or a command line arg to change the value emitted.
+
+Depite the above, the game is 100% playable, although I am so bad at actually playing it I can't really playtest it fully.
+There is a cheat mode which I'll have to see about enabling for testing.
+
+16-nov-21
+got a pointer from arcnor about specific tasm+tlink versions which inspired me to dig the code out again and rebuild.  It seems to have
+helped start producing a closer bytewise output.  Digging around a bit I discovered that two macros were wrong, fixed those and now
+the VGA graphics work as expected!
+Game halts/freezes after being hit a couple times by a baddy.
+
+1-sept-21
+Fixed crash at start of gameplay by fixing equates for weapons. 
+Discovered linker inputs in the game itself.  LINK and LINKVGA were included on the original disk too!  
+This is something I'd spent some time on (see 16-aug) but the info was already in hand.  doh!  turns out I was pretty close.
+got some keyboard controls working.  you can start a game move around and sorta fight a bit.
+keyboard controls:
+	at title screen:
+		1 = single player game
+		s = single player game
+		space = single player game
+		
+		2 = multi-player game
+		enter = multi-player game
+		keypad 5 = multi-player game
+
+	gameplay:
+		player 1
+		w,e,r = left+up, up, right+up
+		a,s,d = left, action, right
+		z,x,c = left+down, down, right+down
+
+
+18-aug-21:
+all video versions now load and display til game starts.
+fixed by correcting r_p, b_p, g_p, i_p equates
+
+17-aug-21:
+tried MASM 5.1 and 5.0, still no luck with a few lines that the compiler complains about and case sensitivity of externs.
+switched to TASM 2.0, released in 1990 which is almost period correct but allowed me to undo 99% of the changes to the main source code to get MASM 5.0 to compile.
+Now using all files as sourced in the original lzh file except for 1 bit in TLZW.ASM, which was easy to work around.
+All code changes can now be focused exclusively in ddeqfile which has many things wrong with it.
+
+16-aug-21
+adjusted makefile to get the ordering of binary blobs in a closer to dragon.exe
+fixed load_m macros to get CGA graphics to display, at least at the title screen.  Tandy also works, no EGA, VGA.
+
+earlier:
+Trying to compile using MASM 6.11, which I thought was going to work because of the reference in TLZW.ASM.
+MASM is forcing me to fix case sensitivity for externs and remove externs that are called out but never used.
+rebuilding macros and EQUs in ddeqfile which was missing.  
+missing makefile for project.
+
+
+

@@ -820,9 +820,13 @@ trigger_table_5	dw	0,	offset dave_5_1,	2 * per_list_size + offset person_table, 
 		dw	50,	offset cartwheel_5_1,	3 * per_list_size + offset person_table, 0
 		dw	90,	offset lowry_5_1,	4 * per_list_size + offset person_table, 0
 		dw	90,	offset lowry_5_2,	5 * per_list_size + offset person_table, 1
-
+if RELEASE_BUILD
+		dw	172,	offset cartwheel_5_2,	2 * per_list_size + offset person_table, 0
+		dw	172,	offset cartwheel_5_3,	3 * per_list_size + offset person_table, 0
+else
 		dw	196,	offset cartwheel_5_2,	2 * per_list_size + offset person_table, 0
 		dw	196,	offset cartwheel_5_3,	3 * per_list_size + offset person_table, 0
+endif
 		dw	228,	offset bill_5_1,	4 * per_list_size + offset person_table, 0
 		dw	247,	offset bill_5_2,	5 * per_list_size + offset person_table, 2
 

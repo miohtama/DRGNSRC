@@ -83,7 +83,12 @@ newivector:	cli
 ;mov	ivect_ip, ax
 ;mov	ax, es: [38]	;take over critical
 ;mov	ivect_cs, ax	;error handler.
-
+if RELEASE_BUILD
+		mov ax, es:[90h]		; int 24h - critical error handling
+		mov [ivect90_ip], ax
+		mov ax, es:[92h]
+		mov [ivect90_cs], ax
+endif
 		mov	ax, es: [8*4]
 		mov	ivect28_ip, ax
 		mov	es:[0fh*4],ax
@@ -98,7 +103,10 @@ newivector:	cli
 		mov	es: [38], cs
 		mov	word ptr es: [8*4], offset timer_int
 		mov	es: [8*4+2], cs
-
+if RELEASE_BUILD
+		mov	word ptr es: [90h], offset do_nothing
+		mov	es: [92h], cs
+endif
 		MOV	FIREJ,1
 		MOV	FIREK,1
 	mov	dx,201h	; Iam sure this is wrong !
@@ -107,6 +115,11 @@ newivector:	cli
 		pop	es
 		pop	ds
 		ret
+if RELEASE_BUILD
+do_nothing:
+	mov al, 0
+	iret
+endif
 fast_i:
 	mov	byte ptr in_slow,0
 	mov	al,36h
@@ -146,7 +159,12 @@ restore_int:	cli
 		mov	es: [36], ax
 		mov	ax, ivect9_cs
 		mov	es: [38], ax
-
+if RELEASE_BUILD
+		mov ax, ivect90_ip
+		mov es:[90h], ax
+		mov ax, ivect90_cs
+		mov es:[92h], ax
+endif
 		call	slow_i
 
 		mov	ax, ivect28_ip		;timer int
@@ -792,9 +810,12 @@ ivect9_ip	dw	0
 ivect9_cs	dw	0
 ivect28_ip	dw	0
 ivect28_cs	dw	0
+if RELEASE_BUILD
+ivect90_ip	dw 0
+ivect90_cs	dw 0
+endif
 intcount	dw	0
 frame_count	dw	0
-
 error_rout	dw	offset flg_error	;div_err
 ;	jmps short via this for a disc loading error
 

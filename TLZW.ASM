@@ -1,5 +1,5 @@
 
-include macross.asm
+;jl!include macross.asm
 
 public  delzw
 
@@ -16,11 +16,14 @@ delzw:
 ;
 	MOV     AX,[SI]         ; read header
 	CMP     AX,9d1fH        ; is it PA in lemp!
-	.if     notzero
+	;jl!.if     notzero
+	jz istrue
 		MOV     CX,0
 		STC                     ;header error
 		RET
-	.endif
+	;jl!.endif
+istrue:
+;jl!	
 	CALL    MDECOMPRESS
 	MOV     CX,AX
 
